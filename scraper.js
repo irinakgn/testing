@@ -19,7 +19,7 @@ const getDesktopPhotos = async () => {
         waitUntil: "networkidle2"
       });
       await page.screenshot({
-        path: `${__dirname}\\public\\images\\${tda}-desktop.jpg`
+        path: `${__dirname}\\client\\public\\images\\${tda}-desktop.jpg`
       });
     } catch (e) {
       await getNotFoundImage(`${tda}-desktop`);
@@ -40,7 +40,7 @@ const getMobilePhotos = async () => {
         waitUntil: "networkidle2"
       });
       await page.screenshot({
-        path: `${__dirname}\\public\\images\\${tda}-mobile.jpg`
+        path: `${__dirname}\\client\\public\\images\\${tda}-mobile.jpg`
       });
     } catch (e) {
       await getNotFoundImage(`${tda}-mobile`);
@@ -51,11 +51,11 @@ const getMobilePhotos = async () => {
 
 const getNotFoundImage = name => {
   const from = `${__dirname}\\image-not-found.jpg`;
-  const to = `${__dirname}\\public\\images\\${name}.jpg`;
+  const to = `${__dirname}\\client\\public\\images\\${name}.jpg`;
 
   return fs
     .copy(from, to)
-    .then(() => console.log("success!"))
+    .then(() => console.log(` failed to download ${name}`))
     .catch(err => console.error(err));
 };
 
