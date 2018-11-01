@@ -1,4 +1,6 @@
-const TDAS = {
+const TDAS = ["tristate", "greaterny", "tristateeast", "midwest", "central", "denver", "pacificnorthwest", "upstateny", "connecticut"];
+
+const citiesMap = {
   tristate: 'Tristate',
   greaterny: 'Greater NY',
   tristateeast: 'Tristate East',
@@ -14,4 +16,5 @@ const TDAS = {
 
 module.exports = {
   TDAS,
+  citiesMap,
 }

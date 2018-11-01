@@ -1,53 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import SwipeableViews from 'react-swipeable-views';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import Zoom from '@material-ui/core/Zoom';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import UpIcon from '@material-ui/icons/KeyboardArrowUp';
-import green from '@material-ui/core/colors/green';
-import {TDAS} from './constants'
+import {TDAS, citiesMap} from './constants'
 
 function TabContainer(props) {
-  const {children, dir} = props;
-
   return (
-    <Typography component="div" dir={dir} style={{padding: 8 * 3}}>
-      {children}
+    <Typography component="div" style={{padding: 8 * 3}}>
+      {props.children}
     </Typography>
   );
 }
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired,
 };
 
 const styles = theme => ({
   root: {
+    flexGrow: 1,
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
-    position: 'relative',
-    minHeight: 200,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-  },
-  fabGreen: {
-    color: theme.palette.common.white,
-    backgroundColor: green[500],
   },
 });
 
-class FloatingActionButtonZoom extends React.Component {
+class ScrollableTabsButtonAuto extends React.Component {
   state = {
     value: 0,
   };
@@ -56,56 +36,55 @@ class FloatingActionButtonZoom extends React.Component {
     this.setState({value});
   };
 
-  handleChangeIndex = index => {
-    this.setState({value: index});
-  };
-
   getTabs = () => {
-    return Object.entries(TDAS).map(([key, value] = {}) => {
-      return <Tab style={{flexBasis: 1, flexGrow: 0}} key={key} name={key} label={value}/>
+    return TDAS.map((tda) => {
+      return <Tab label={citiesMap[tda]}/>
     })
   }
 
-  render() {
-    const {classes, theme} = this.props;
-    const transitionDuration = {
-      enter: theme.transitions.duration.enteringScreen,
-      exit: theme.transitions.duration.leavingScreen,
-    };
+  //TODO: work here!
+  getTabContnent = (tda) => {
+    const regionKey = TDAS[tda]; // name of the image
+    const regionValue = citiesMap[regionKey] // display name
+    return (<TabContainer>
+      <Typography> {regionValue} </Typography>
+      <div style={{display: 'inline-flex'}}>
+        <h2>Desktop</h2>
+        <img src={`/images/${regionKey}-desktop.jpg`}></img>
+        <h2>Mobile</h2>
+        <img src={`/images/${regionKey}-mobile.jpg`}></img>
+      </div>
+    </TabContainer>)
 
+  }
+
+  render() {
+    const {classes} = this.props;
+    const {value} = this.state;
 
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
           <Tabs
-            value={this.state.value}
+            value={value}
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            fullWidth
+            scrollable
+            scrollButtons="auto"
           >
             {this.getTabs()}
           </Tabs>
         </AppBar>
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={this.state.value}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          {Object.entries(TDAS).map(([key, value] = {}) => <TabContainer dir={theme.direction} key={key} name={key}
-                                                                         label={value}>
-            {value}
-          </TabContainer>)}
-        </SwipeableViews>
+        {this.getTabContnent(value)}
 
       </div>
     );
   }
 }
 
-FloatingActionButtonZoom.propTypes = {
+ScrollableTabsButtonAuto.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, {withTheme: true})(FloatingActionButtonZoom);
+export default withStyles(styles)(ScrollableTabsButtonAuto);
