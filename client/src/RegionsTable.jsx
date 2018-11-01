@@ -33,7 +33,6 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
     position: 'relative',
     minHeight: 200,
   },
@@ -63,7 +62,7 @@ class FloatingActionButtonZoom extends React.Component {
 
   getTabs = () => {
     return Object.entries(TDAS).map(([key, value] = {}) => {
-      return <Tab key={key} name={key} label={value}/>
+      return <Tab style={{flexBasis: 1, flexGrow: 0}} key={key} name={key} label={value}/>
     })
   }
 
