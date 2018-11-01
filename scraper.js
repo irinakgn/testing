@@ -13,7 +13,6 @@ const getDesktopPhotos = async () => {
   for (let tda of TDAS) {
     try {
       const page = await browser.newPage();
-      page.setViewport({ width: 1024, height: 2000 });
       console.log(`fetching ... ${tda} ... desktop`);
       await page.goto(`https://www.buyatoyota.com/${tda}`, {
         waitUntil: "networkidle2"
@@ -23,10 +22,11 @@ const getDesktopPhotos = async () => {
       });
     } catch (e) {
       await getNotFoundImage(`${tda}-desktop`);
-    }
+         }
   }
   await browser.close();
 };
+
 
 const getMobilePhotos = async () => {
   const browser = await puppeteer.launch();
@@ -44,10 +44,32 @@ const getMobilePhotos = async () => {
       });
     } catch (e) {
       await getNotFoundImage(`${tda}-mobile`);
-    }
+        }
   }
   await browser.close();
 };
+
+
+const getOffersPhotos = async () => {
+ const browser = await puppeteer.launch();
+for (let tda of TDAS) {
+ try {
+const page = await browser.newPage();
+page.setViewport({ width: 512, height: 1000 });
+console.log(`fetching ... ${tda} ... offers`);
+await page.goto(`https://www.buyatoyota.com/${tda}/offers`, {
+  waitUntil: "networkidle2"
+});
+await page.screenshot({
+  path: `${__dirname}\\client\\public\\images\\${tda}-offers.jpg`
+});
+} catch (e) {
+ await getNotFoundImage(`${tda}-offers`);
+}
+}
+await browser.close();
+};
+
 
 const getNotFoundImage = name => {
   const from = `${__dirname}\\image-not-found.jpg`;
@@ -63,6 +85,6 @@ const start = async () => {
   console.log("start....");
 };
 
-Promise.all([start(), getDesktopPhotos(), getMobilePhotos()])
+Promise.all([start(), getDesktopPhotos(), getMobilePhotos(),getOffersPhotos()])
   .then(() => console.log("done"))
   .catch(e => console.log(e));

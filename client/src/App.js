@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-import TdaCard from "./TdaCard";
 import {TDAS} from './constants'
+import RegionsTable from './RegionsTable'
 
 const styles = {
   content: {
@@ -13,14 +13,10 @@ const styles = {
 
 class App extends Component {
 
-  getTDAList = () => {
-    return TDAS.map(tda => <TdaCard key={tda} tda={tda}/>)
-  }
-
   render() {
     return (
       <div style={styles.content}>
-        {this.getTDAList()}
+        <RegionsTable tdas={TDAS}/>
       </div>
     );
   }
