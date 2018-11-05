@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {TDAS} from './constants'
-import RegionsTable from './RegionsTable'
+import RegionsTable  from './RegionsTable'
 
 const styles = {
   content: {
@@ -17,7 +17,7 @@ class App extends Component {
     return (
       <div style={styles.content}>
         <RegionsTable tdas={TDAS}/>
-      </div>
+           </div>
     );
   }
 }

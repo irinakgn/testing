@@ -6,6 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import {TDAS, citiesMap} from './constants'
+import ImageList from './ImageList'
+
 
 function TabContainer(props) {
   return (
@@ -42,21 +44,30 @@ class ScrollableTabsButtonAuto extends React.Component {
     })
   }
 
-  //TODO: work here!
+  //TODO:
   getTabContnent = (tda) => {
     const regionKey = TDAS[tda]; // name of the image
     const regionValue = citiesMap[regionKey] // display name
+
+    // likely to be multiple
+    const desktopImages = [{img: `/images/${regionKey}-desktop.jpg`, title: regionKey}];
+    const mobileImages = [{img: `/images/${regionKey}-mobile.jpg`, title: regionKey}];
+
     return (<TabContainer>
       <Typography> {regionValue} </Typography>
-      <div style={{display: 'inline-flex'}}>
-        <h2>Desktop</h2>
-        <img src={`/images/${regionKey}-desktop.jpg`}></img>
-        <h2>Mobile</h2>
-        <img src={`/images/${regionKey}-mobile.jpg`}></img>
+      <div>
+        <div>
+          <h3>Desktop</h3>
+          <ImageList images={desktopImages}/>
+        </div>
+        <div>
+          <h3>Mobile</h3>
+          <ImageList images={mobileImages}/>
+        </div>
       </div>
     </TabContainer>)
 
-  }
+  };
 
   render() {
     const {classes} = this.props;
@@ -88,3 +99,4 @@ ScrollableTabsButtonAuto.propTypes = {
 };
 
 export default withStyles(styles)(ScrollableTabsButtonAuto);
+
