@@ -65,6 +65,7 @@ class ScrollableTabsButtonAuto extends React.Component {
           <ImageList images={mobileImages}/>
         </div>
       </div>
+
     </TabContainer>)
 
   };

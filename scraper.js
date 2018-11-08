@@ -15,7 +15,7 @@ const getDesktopPhotos = async () => {
       const page = await browser.newPage();
       console.log(`fetching ... ${tda} ... desktop`);
       await page.goto(`https://www.buyatoyota.com/${tda}`, {
-        waitUntil: "networkidle2"
+        await page.waitFor(10000)
       });
       await page.screenshot({
         path: `${__dirname}\\client\\public\\images\\${tda}-desktop.jpg`
@@ -37,7 +37,7 @@ const getMobilePhotos = async () => {
       console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
 
       await page.goto(`https://www.buyatoyota.com/${tda}`, {
-        waitUntil: "networkidle2"
+        await page.waitFor(10000)
       });
       await page.screenshot({
         path: `${__dirname}\\client\\public\\images\\${tda}-mobile.jpg`
@@ -58,7 +58,7 @@ const page = await browser.newPage();
 page.setViewport({ width: 512, height: 1000 });
 console.log(`fetching ... ${tda} ... offers`);
 await page.goto(`https://www.buyatoyota.com/${tda}/offers`, {
-  waitUntil: "networkidle2"
+  await page.waitFor(10000)
 });
 await page.screenshot({
   path: `${__dirname}\\client\\public\\images\\${tda}-offers.jpg`

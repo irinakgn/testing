@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
+import {Grid, GridListTileBar, Dialog, DialogTitle, DialogActions, DialogContent, Button} from '@material-ui/core';
+import RadioButton from './RadioButton';
+import {capitalize} from 'lodash'
 
 const styles = theme => ({
   root: {
@@ -29,32 +29,75 @@ const styles = theme => ({
   },
 });
 
-function ImageList(props) {
-  const { classes, images } = props;
+class ImageList extends React.PureComponent {
 
-  return (
-    <div className={classes.root}>
-      <GridList className={classes.gridList} cols={2.5}>
-        {images.map(tile => (
-          <GridListTile key={tile.img}>
-            <img src={tile.img} alt={tile.title} />
-            <GridListTileBar
-              title={tile.title}
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
-  );
+
+  state = {
+    isOpen: false,
+    currentImage: null,
+  };
+
+  onOpen = (image) => {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      currentImage: image
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      currentImage: null
+    })
+  }
+
+  render() {
+    const {classes, images} = this.props;
+    const {currentImage} = this.state
+    return (
+      <div className={classes.root}>
+        {this.state.isOpen && <Dialog open>
+          <Dialog
+            maxWidth={'lg'}
+            open
+            onClose={this.handleClose}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle id="responsive-dialog-title">{capitalize(currentImage.title)}</DialogTitle>
+            <DialogContent>
+              <img src={currentImage.img}/>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.onClose} color="primary">
+                Close
+              </Button>
+
+            </DialogActions>
+          </Dialog>
+        </Dialog>}
+        <Grid container spacing={8}>
+          <Grid item xs={12} lg={12}>
+            <GridList className={classes.gridList} cols={2.5}>
+              {images.map(tile => (
+                <GridListTile key={tile.img} style={{borderTop: '2px solid black'}}>
+                  <img src={tile.img} alt={tile.title} width={200} onClick={() => this.onOpen(tile)}/>
+                  <GridListTileBar
+                    style={{
+                      color:'black',
+                      backgroundColor: '#d8caca',
+                    }}
+                    title={tile.title}
+                    actionIcon={
+                      <RadioButton/>
+                    }
+                  />
+                </GridListTile>
+              ))}>
+            </GridList>
+          </Grid>
+        </Grid>
+      </div>);
+  }
 }
 
 ImageList.propTypes = {
