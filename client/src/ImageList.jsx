@@ -7,6 +7,8 @@ import {Grid, GridListTileBar, Dialog, DialogTitle, DialogActions, DialogContent
 import RadioButton from './RadioButton';
 import {capitalize} from 'lodash'
 
+
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -50,6 +52,12 @@ class ImageList extends React.PureComponent {
       currentImage: null
     })
   }
+
+
+
+//onst images= {`/images/${regionKey}-desktop.jpg`, `/images/${regionKey}-desktop.jpg`,};
+
+
 
   render() {
     const {classes, images} = this.props;

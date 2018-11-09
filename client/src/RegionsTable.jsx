@@ -50,19 +50,27 @@ class ScrollableTabsButtonAuto extends React.Component {
     const regionValue = citiesMap[regionKey] // display name
 
     // likely to be multiple
+
+    //desktop
     const desktopImages = [{img: `/images/${regionKey}-desktop.jpg`, title: regionKey}];
+
+
+// mobile
     const mobileImages = [{img: `/images/${regionKey}-mobile.jpg`, title: regionKey}];
+
 
     return (<TabContainer>
       <Typography> {regionValue} </Typography>
       <div>
         <div>
           <h3>Desktop</h3>
-          <ImageList images={desktopImages}/>
+          <ImageList images={desktopImages}/> <ImageList images={desktopOffers}/>
+
         </div>
         <div>
           <h3>Mobile</h3>
           <ImageList images={mobileImages}/>
+
         </div>
       </div>
 

@@ -6,70 +6,103 @@ const devices = require("puppeteer/DeviceDescriptors");
 const PHONE_TYPE = "iPhone 6";
 const iPhone = devices[PHONE_TYPE];
 
-const TDAS = require("./client/src/constants").TDAS;
+const {TDAS, vehicleCodes} = require("./client/src/constants");
 
-const getDesktopPhotos = async () => {
+
+
+const getCarOffersDesktop = async () => {
   const browser = await puppeteer.launch();
+  const page = await browser.newPage();
   for (let tda of TDAS) {
-    try {
-      const page = await browser.newPage();
-      console.log(`fetching ... ${tda} ... desktop`);
-      await page.goto(`https://www.buyatoyota.com/${tda}`, {
-        await page.waitFor(10000)
-      });
-      await page.screenshot({
-        path: `${__dirname}\\client\\public\\images\\${tda}-desktop.jpg`
-      });
-    } catch (e) {
-      await getNotFoundImage(`${tda}-desktop`);
-         }
+    for (const vehicleCode of vehicleCodes) {
+      try {
+        console.log(`fetching ... ${tda} ... vehicles`);
+        await page.goto(`https://www.buyatoyota.com/${tda}/offers/${vehicleCode}/`, {
+          await: page.waitFor(10000)
+        });
+        await page.screenshot({
+          path: `${__dirname}\\client\\public\\images\\${tda}-${vehicleCode}-offer-desktop.jpg`
+        });
+      } catch (e) {
+        await getNotFoundImage(`${vehicleCode}-${tda}-desktop`);
+      }
+    }
   }
   await browser.close();
-};
+}
 
-
-const getMobilePhotos = async () => {
+const getCarOffersMobile = async () => {
   const browser = await puppeteer.launch();
+  const page = await browser.newPage();
   for (let tda of TDAS) {
-    try {
-      const page = await browser.newPage();
-      await page.emulate(iPhone);
-      console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
+    for (const vehicleCode of vehicleCodes) {
+      try {
 
-      await page.goto(`https://www.buyatoyota.com/${tda}`, {
-        await page.waitFor(10000)
-      });
-      await page.screenshot({
-        path: `${__dirname}\\client\\public\\images\\${tda}-mobile.jpg`
-      });
-    } catch (e) {
-      await getNotFoundImage(`${tda}-mobile`);
-        }
+        await page.emulate(iPhone);
+        console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
+
+        await page.goto(`https://www.buyatoyota.com/${tda}/offers/${vehicleCode}/`, {
+          await: page.waitFor(10000)
+        });
+        await page.screenshot({
+          path: `${__dirname}\\client\\public\\images\\${tda}-${vehicleCode}-offer-mobile.jpg`
+        });
+
+
+      } catch (e) {
+        await getNotFoundImage(`${vehicleCode}-${tda}-desktop`);
+      }
+    }
   }
   await browser.close();
-};
-
-
-const getOffersPhotos = async () => {
- const browser = await puppeteer.launch();
-for (let tda of TDAS) {
- try {
-const page = await browser.newPage();
-page.setViewport({ width: 512, height: 1000 });
-console.log(`fetching ... ${tda} ... offers`);
-await page.goto(`https://www.buyatoyota.com/${tda}/offers`, {
-  await page.waitFor(10000)
-});
-await page.screenshot({
-  path: `${__dirname}\\client\\public\\images\\${tda}-offers.jpg`
-});
-} catch (e) {
- await getNotFoundImage(`${tda}-offers`);
 }
-}
-await browser.close();
-};
 
+const getCarsDesktop = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (let tda of TDAS) {
+    for (const vehicleCode of vehicleCodes) {
+      try {
+        console.log(`fetching ... ${tda} ... vehicles`);
+        await page.goto(`https://www.buyatoyota.com/${tda}/vehicles/${vehicleCode}/`, {
+          await: page.waitFor(10000)
+        });
+        await page.screenshot({
+          path: `${__dirname}\\client\\public\\images\\${tda}-${vehicleCode}-desktop.jpg`
+        });
+      } catch (e) {
+        await getNotFoundImage(`${vehicleCode}-${tda}-desktop`);
+      }
+    }
+  }
+  await browser.close();
+}
+
+const getCarsMobile = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (let tda of TDAS) {
+    for (const vehicleCode of vehicleCodes) {
+      try {
+
+        await page.emulate(iPhone);
+        console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
+
+        await page.goto(`https://www.buyatoyota.com/${tda}/vehicles/${vehicleCode}/`, {
+          await: page.waitFor(10000)
+        });
+        await page.screenshot({
+          path: `${__dirname}\\client\\public\\images\\${tda}-${vehicleCode}-mobile.jpg`
+        });
+
+
+      } catch (e) {
+        await getNotFoundImage(`${vehicleCode}-${tda}-desktop`);
+      }
+    }
+  }
+  await browser.close();
+}
 
 const getNotFoundImage = name => {
   const from = `${__dirname}\\image-not-found.jpg`;
@@ -85,6 +118,99 @@ const start = async () => {
   console.log("start....");
 };
 
-Promise.all([start(), getDesktopPhotos(), getMobilePhotos(),getOffersPhotos()])
-  .then(() => console.log("done"))
-  .catch(e => console.log(e));
+const getDesktopHomePage = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (const tda of TDAS) {
+    try {
+      console.log(`fetching ... ${tda} ... desktop`);
+      await page.goto(`https://www.buyatoyota.com/${tda}`, {
+        await: page.waitFor(10000)
+      });
+      await page.screenshot({
+        path: `${__dirname}\\client\\public\\images\\${tda}-desktop-homepage.jpg`
+      });
+    } catch (e) {
+      await getNotFoundImage(`${tda}-desktop`);
+    }
+  }
+  await browser.close();
+};
+
+
+const getMobileHomePage = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (let tda of TDAS) {
+    try {
+      await page.emulate(iPhone);
+      console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
+
+      await page.goto(`https://www.buyatoyota.com/${tda}`, {
+        await: page.waitFor(10000)
+      });
+      await page.screenshot({
+        path: `${__dirname}\\client\\public\\images\\${tda}-mobile-homepage.jpg`
+      });
+    } catch (e) {
+      await getNotFoundImage(`${tda}-mobile`);
+    }
+  }
+  await browser.close();
+};
+
+
+const getMobileOffers = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (let tda of TDAS) {
+    try {
+      await page.emulate(iPhone);
+      console.log(`fetching ... ${tda} ... ${PHONE_TYPE}`);
+
+      await page.goto(`https://www.buyatoyota.com/${tda}/offers`, {
+        await: page.waitFor(10000)
+      });
+      await page.screenshot({
+        path: `${__dirname}\\client\\public\\images\\${tda}-mobile-offers.jpg`
+      });
+    } catch (e) {
+      await getNotFoundImage(`${tda}-mobileOffers`);
+    }
+  }
+  await browser.close();
+};
+
+const getDesktopOffers = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  for (let tda of TDAS) {
+    try {
+      console.log(`fetching ... ${tda} ... offers`);
+      await page.goto(`https://www.buyatoyota.com/${tda}/offers`, {
+        await: page.waitFor(10000)
+      });
+      await page.screenshot({
+        path: `${__dirname}\\client\\public\\images\\${tda}-desktop-offers.jpg`
+      });
+    } catch (e) {
+      await getNotFoundImage(`${tda}-offers`);
+    }
+  }
+  await browser.close();
+};
+
+const callStack = [];
+
+// callStack.push(start())
+callStack.push(getCarOffersDesktop());
+callStack.push(getCarOffersMobile());
+callStack.push(getCarsDesktop());
+callStack.push(getCarsMobile());
+callStack.push(getDesktopHomePage());
+callStack.push(getMobileHomePage());
+callStack.push(getMobileOffers());
+callStack.push(getDesktopOffers());
+
+Promise.all(callStack).then(() => console.log("done")).catch(e => console.log(e));
+
